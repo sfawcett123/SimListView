@@ -1,15 +1,9 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace SimListView
 {
-    public enum COLUMNS
-    {
-        Parameter,
-        Index,
-        Value,
-        Unit
-    }
     partial class SimListView
     {
         /// <summary>  
@@ -47,17 +41,73 @@ namespace SimListView
             this.Size = new Size(500, 400);
             this.TabIndex = 0;
             this.UseCompatibleStateImageBehavior = false;
-
-
+        }
+        // <summary>
+        /// Creates columns based on the properties of the specified type.
+        // </summary>
+        private void CreateColumns()
+        {
             this.Items.Clear();
             this.Columns.Clear();
-            this.Columns.Add(COLUMNS.Parameter.ToString(), 150, HorizontalAlignment.Center);
-            this.Columns.Add(COLUMNS.Index.ToString(), 50, HorizontalAlignment.Center);
-            this.Columns.Add(COLUMNS.Value.ToString(), 200, HorizontalAlignment.Center);
-            this.Columns.Add(COLUMNS.Unit.ToString(), 100, HorizontalAlignment.Center);
+  
+            PropertyInfo[] properties = typeof(Yaml.DataDefinition.Details).GetProperties().ToArray();
 
+            foreach (var property in properties)
+            {
+                if (property.PropertyType.IsClass && !property.PropertyType.FullName.StartsWith("System."))
+                {
+                    PropertyInfo[] p2 = property.PropertyType.GetProperties().ToArray();
+                    foreach (var subProperty in p2)
+                    {
+                        ColumnHeader item = new ColumnHeader($"{property.Name}.{subProperty.Name}");
+                        item.Text = $"{property.Name}.{subProperty.Name}";
+                        item.Tag = subProperty;
+                        this.Columns.Add(item);
+                    }
+                }
+                else
+                {
+                    ColumnHeader item = new ColumnHeader(property.Name);
+                    item.Text = property.Name;
+                    item.Tag = property;
+                    this.Columns.Add(item);
+                }
+            }
         }
 
+        private void CreateRows(Yaml.DataDefinition data)
+        {
+            Items.Clear();
+            PropertyInfo[] properties = typeof(Yaml.DataDefinition.Details).GetProperties().ToArray();
+
+            foreach ( Yaml.DataDefinition.Details measure in data.measures)
+            {
+               ListViewItem listViewItem = new ListViewItem( measure.id);
+
+               foreach (var property in properties)
+                {
+                    if (property.Name == "id")
+                    {
+                        listViewItem.Text = (string)YamlExtensions.GetPropertyValue(measure, property.Name);
+                        continue;
+                    }
+                    if (property.PropertyType.IsClass && !property.PropertyType.FullName.StartsWith("System."))
+                    {
+                        PropertyInfo[] p2 = property.PropertyType.GetProperties().ToArray();
+                        foreach (var subProperty in p2)
+                        {
+                           listViewItem.SubItems.Add( YamlExtensions.GetPropertyValue ( measure , property.Name , subProperty.Name ) ); 
+                        }
+                    }
+                    else
+                    {
+                        listViewItem.SubItems.Add( YamlExtensions.GetPropertyValue(measure , property.Name));
+                    }
+                }
+
+               Items.Add(listViewItem);
+            }
+        }
         #endregion
         public List<string> to_string()
         {

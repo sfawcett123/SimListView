@@ -21,7 +21,18 @@ namespace SimListView
         public void load(string filePath)
         {
            Debug.WriteLine( $"Loading file {filePath}" );
-           Yaml y = new Yaml(this, filePath);
+           Yaml y = new Yaml( filePath);
+           if (y.Data == null)
+                {
+                 Debug.WriteLine("No data found in the YAML file.");
+                 return;
+            }
+            if (y.Data.measures != null)
+            {
+                CreateColumns();
+                CreateRows(y.Data);
+            }
+
         }
     }
 }
