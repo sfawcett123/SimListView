@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,12 @@ namespace SimListView
         public SimListView()
         {
             InitializeComponent();
+        }
+
+        public void load(string filePath)
+        {
+           Debug.WriteLine( $"Loading file {filePath}" );
+           Yaml y = new Yaml(this, filePath);
         }
     }
 }

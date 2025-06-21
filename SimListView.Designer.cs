@@ -3,6 +3,13 @@ using System.Windows.Forms;
 
 namespace SimListView
 {
+    public enum COLUMNS
+    {
+        Parameter,
+        Index,
+        Value,
+        Unit
+    }
     partial class SimListView
     {
         /// <summary>  
@@ -41,39 +48,17 @@ namespace SimListView
             this.TabIndex = 0;
             this.UseCompatibleStateImageBehavior = false;
 
+
             this.Items.Clear();
             this.Columns.Clear();
-            this.Columns.Add("Parameter", 200, HorizontalAlignment.Center);
-            this.Columns.Add("Value", 200, HorizontalAlignment.Center);
-            this.Columns.Add("Unit", 100, HorizontalAlignment.Center);
+            this.Columns.Add(COLUMNS.Parameter.ToString(), 150, HorizontalAlignment.Center);
+            this.Columns.Add(COLUMNS.Index.ToString(), 50, HorizontalAlignment.Center);
+            this.Columns.Add(COLUMNS.Value.ToString(), 200, HorizontalAlignment.Center);
+            this.Columns.Add(COLUMNS.Unit.ToString(), 100, HorizontalAlignment.Center);
 
         }
 
         #endregion
-        public void add_value(string key, string value, string unit = "")
-        {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(new Action(() => add_value(key, value, unit)));
-                return;
-            }
-            foreach (ListViewItem item in this.Items)
-            {
-                if (item.Text == key)
-                {
-                    item.SubItems[1].Text = value;
-                    if (item.SubItems.Count > 2)
-                    {
-                        item.SubItems[2].Text = unit;
-                    }
-                    return; // Exit if the item already exists
-                }
-            }
-            ListViewItem newItem = new ListViewItem(key);
-            newItem.SubItems.Add(value);
-            newItem.SubItems.Add(unit);
-            this.Items.Add(newItem);
-        }
         public List<string> to_string()
         {
             if (this.InvokeRequired)
