@@ -15,6 +15,7 @@ namespace SimListView
     {
         private bool _TestMode = false;
 
+        [DefaultValue(false)]
         public bool TestMode
         {
             get { return _TestMode; }
