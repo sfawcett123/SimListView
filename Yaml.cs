@@ -1,13 +1,15 @@
-﻿using Microsoft.Win32;
-using System.CodeDom;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using YamlDotNet.Core.Tokens;
 using YamlDotNet.Serialization;
 
 namespace SimListView
 {
+    enum Rotataion
+    {
+        RESTART,
+        RETURN
+        
+    }
     internal class Yaml
     {
         public DataDefinition? Data { get { return _Data; } }
@@ -18,9 +20,11 @@ namespace SimListView
         {
             public class Settings
             {
-                public int Max { get; set; }
-                public int Min { get; set; }
+                public int Max { get; set; } = 0;
+                public int Min { get; set; } = 10000;
                 public string Unit { get; set; } = "";
+                public Rotataion Rotation { get; set; } = Rotataion.RESTART;
+                public int Increment { get; set; } = 10;
             }
 
             public class Details

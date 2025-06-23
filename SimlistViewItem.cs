@@ -5,7 +5,7 @@ using Timer = System.Timers.Timer;
 
 namespace SimListView
 {
-    internal class SimlistViewItem : ListViewItem
+    internal class SimListViewItem : ListViewItem
     {
         public enum Rotation
         {
@@ -173,7 +173,7 @@ namespace SimListView
 
         #region Constructors
 
-        public SimlistViewItem(string text, SimListView container) : base(text)
+        public SimListViewItem(string text, SimListView container) : base(text)
         {
             TestMode = false; // Default to not in test mode
             tick.Elapsed += onTimerTick; // Correctly attach the event handler for the Timer's Elapsed event

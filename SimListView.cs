@@ -13,9 +13,22 @@ namespace SimListView
 {
     public partial class SimListView : ListView
     {
-        public SimListView()
+        private bool _TestMode = false;
+
+        public bool TestMode
         {
-            InitializeComponent();
+            get { return _TestMode; }
+            set
+            {
+                _TestMode = value; // Ensure the backing field is updated
+                foreach (SimListViewItem item in this.Items)
+                {
+                    if (item is SimListViewItem simItem)
+                    {
+                        item.TestMode = value;
+                    }
+                }
+            }
         }
 
         public void load(string filePath)
@@ -31,6 +44,10 @@ namespace SimListView
             {
                 CreateColumns();
                 CreateRows(y.Data);
+                foreach (ColumnHeader column in this.Columns)
+                {
+                    AutoResizeColumn(column.Index, ColumnHeaderAutoResizeStyle.ColumnContent);
+                }
             }
 
         }

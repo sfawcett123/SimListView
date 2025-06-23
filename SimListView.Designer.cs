@@ -49,7 +49,7 @@ namespace SimListView
         {
             this.Items.Clear();
             this.Columns.Clear();
-  
+
             PropertyInfo[] properties = typeof(Yaml.DataDefinition.Details).GetProperties().ToArray();
 
             foreach (var property in properties)
@@ -73,6 +73,10 @@ namespace SimListView
                     this.Columns.Add(item);
                 }
             }
+            ColumnHeader vitem = new ColumnHeader("Value");
+            vitem.Text = "Value";
+            vitem.Tag = "Value";
+            this.Columns.Add(vitem);
         }
 
         private void CreateRows(Yaml.DataDefinition data)
@@ -82,7 +86,7 @@ namespace SimListView
 
             foreach ( Yaml.DataDefinition.Details measure in data.measures)
             {
-               ListViewItem listViewItem = new ListViewItem( measure.Id);
+               SimListViewItem listViewItem = new SimListViewItem( measure.Id , this);
 
                foreach (var property in properties)
                 {
@@ -96,16 +100,19 @@ namespace SimListView
                         PropertyInfo[] p2 = property.PropertyType.GetProperties().ToArray();
                         foreach (var subProperty in p2)
                         {
-                           listViewItem.SubItems.Add( YamlExtensions.GetPropertyValue ( measure , property.Name , subProperty.Name ) ); 
+                           var s = $"{property.Name}.{subProperty.Name}";
+                            // Get the value of the sub-property
+                            listViewItem.Set(s, YamlExtensions.GetPropertyValue ( measure , property.Name , subProperty.Name ) ); 
                         }
                     }
                     else
                     {
-                        listViewItem.SubItems.Add( YamlExtensions.GetPropertyValue(measure , property.Name));
+                        listViewItem.Set( property.Name, YamlExtensions.GetPropertyValue(measure , property.Name));
                     }
                 }
 
-               Items.Add(listViewItem);
+                listViewItem.Set("Value", "");
+                Items.Add(listViewItem);
             }
         }
         #endregion
