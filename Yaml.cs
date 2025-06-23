@@ -95,12 +95,12 @@ namespace SimListView
             {
                 child = settingInstance.GetType().GetProperties().Single(pi => pi.Name == detailsName);
                 var p = parent.GetValue(setting);
-                rval = child.GetValue(p).ToString();
+                rval = child.GetValue(p)?.ToString() ?? "";
                
             }
             else
             {
-                rval = parent.GetValue(setting).ToString();
+                rval = parent.GetValue(setting)?.ToString() ?? "";
             }
             return rval;
         }
