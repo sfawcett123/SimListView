@@ -82,11 +82,11 @@ namespace SimListView
 
             foreach ( Yaml.DataDefinition.Details measure in data.measures)
             {
-               ListViewItem listViewItem = new ListViewItem( measure.id);
+               ListViewItem listViewItem = new ListViewItem( measure.Id);
 
                foreach (var property in properties)
                 {
-                    if (property.Name == "id")
+                    if (property.Name == "Id")
                     {
                         listViewItem.Text = (string)YamlExtensions.GetPropertyValue(measure, property.Name);
                         continue;

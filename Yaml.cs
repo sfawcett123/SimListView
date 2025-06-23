@@ -10,27 +10,27 @@ namespace SimListView
 {
     internal class Yaml
     {
-        public DataDefinition? Data { get { return data; } }
+        public DataDefinition? Data { get { return _Data; } }
 
-        private DataDefinition? data;
+        private readonly DataDefinition? _Data;
 
         public class DataDefinition
         {
             public class Settings
             {
-                public int max { get; set; }
-                public int min { get; set; }
-                public string unit { get; set; } = "";
+                public int Max { get; set; }
+                public int Min { get; set; }
+                public string Unit { get; set; } = "";
             }
 
             public class Details
             {
-                public string? id { get; set; }
-                public string? name { get; set; }
-                public string? variable { get; set; }
-                public int? index { get; set; }
-                public Settings? real { get; set; }
-                public Settings? display { get; set; }
+                public string? Id { get; set; }
+                public string? Name { get; set; }
+                public string? Variable { get; set; }
+                public int? Index { get; set; }
+                public Settings? Real { get; set; }
+                public Settings? Display { get; set; }
             }
 
             public List<Details>? measures { get; set; }
@@ -49,12 +49,14 @@ namespace SimListView
             // Load the YAML file
             string yaml = File.ReadAllText(filePath);
             Debug.WriteLine($"==> YAML file loaded successfully");
-            data = Deserializer(yaml);
+            _Data = Deserializer(yaml);
         }
 
         public DataDefinition Deserializer(string Data)
         {
-            var deserializer = new DeserializerBuilder().Build();
+            var deserializer = new DeserializerBuilder()
+                .WithCaseInsensitivePropertyMatching()
+                .Build();
 
             return deserializer.Deserialize<DataDefinition>(Data.ToString());
         }
