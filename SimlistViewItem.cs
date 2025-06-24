@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.Xml;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 using Timer = System.Timers.Timer;
 
@@ -13,7 +14,6 @@ namespace SimListView
             RESTART,
             REVERSE
         }
-
         #region Private Objects
         private bool _testMode;
         private Timer tick = new Timer()
@@ -22,8 +22,19 @@ namespace SimListView
             Enabled = true
         };
         #endregion
-
+        #region Public Events
+        public event EventHandler<ItemData>? ItemChanged;
+        #endregion
         #region public Properties
+        public string Key
+        {
+            get
+            {
+                string? valueText = SubItems["variable"]?.Text;
+                string? indexInt = SubItems["index"]?.Text;
+                return $"{valueText}[{indexInt}]" ?? string.Empty; // Return empty string if Key subitem is not found    
+            }
+        }
         public bool TestMode
         {
             get => _testMode;
@@ -84,7 +95,18 @@ namespace SimListView
         }
         private int Value
         {
-        
+            set
+            {
+                if (SubItems.ContainsKey("Value") && SubItems["Value"] != null)
+                {
+                    OnItemChanged(new ItemData { key = this.Key , value = value.ToString() });
+                    SubItems["Value"]!.Text = value.ToString(); // Use null-forgiving operator to suppress CS8602
+                }
+                else
+                {
+                    Debug.WriteLine("SubItem 'Value' is null or does not exist.");
+                }
+            }
             get
             {
 
@@ -154,7 +176,6 @@ namespace SimListView
                 }
             }
         }
-
         private ILogger? logger = null;
         private Rotation RotationType
         {
@@ -179,9 +200,7 @@ namespace SimListView
             }
         }
         #endregion
-
         #region Constructors
-
         public SimListViewItem(string text, SimListView container , ILogger logger) : base(text)
         {
             logger = logger ?? throw new ArgumentNullException(nameof(logger), "Logger cannot be null.");
@@ -196,9 +215,7 @@ namespace SimListView
                 this.SubItems.Add(subItem);
             }
         }
-
         #endregion
-
         #region Public Methods
         public void Set(string key, string value)
         {
@@ -207,8 +224,7 @@ namespace SimListView
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
                 ListViewSubItem si = SubItems[key];
-                logger?.LogDebug($"Setting SubItem '{si.Name}' with value '{value}'");
-                si.Text = value ?? "";
+                if (si.Text != value) si.Text = value ?? "";
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.  
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
@@ -217,9 +233,7 @@ namespace SimListView
                 throw new ArgumentException($"Key '{key}' does not exist in SubItems.", nameof(key));
             }
         }
-
         #endregion 
-
         #region Private Methods
         private int incrementValue( int value , int min , int max , int increment , Rotation rotation = Rotation.RESTART)
         {
@@ -249,7 +263,6 @@ namespace SimListView
 
             return value;
         }
-
         private void onTimerTick(object? sender, System.Timers.ElapsedEventArgs e)
         {
             if (!TestMode)
@@ -263,11 +276,8 @@ namespace SimListView
                 {   // If InvokeRequired, use Invoke to update the ListView from the UI thread
                     this.ListView.Invoke(new Action(() =>
                     {
-                        if (SubItems.ContainsKey("Value") && SubItems["Value"] != null) // Ensure SubItem exists and is not null  
-                        {
-                           string s = incrementValue(Value, Min, Max, Increment, RotationType).ToString(); 
-                           SubItems["Value"]!.Text = s ?? "<EMPTY"; // Use null-forgiving operator to suppress CS8602
-                        }
+                           Value = incrementValue(Value, Min, Max, Increment, RotationType); 
+
                     }));
                 }
                 catch (Exception ex)
@@ -280,10 +290,7 @@ namespace SimListView
             {
                 try
                 {
-                    if (SubItems.ContainsKey("Value") && SubItems["Value"] != null) // Ensure SubItem exists and is not null  
-                    {
-                        SubItems["Value"]!.Text = incrementValue(Value, Min, Max, Increment, RotationType).ToString(); // Use null-forgiving operator to suppress CS8602
-                    }
+                    Value = incrementValue(Value, Min, Max, Increment, RotationType);
                 }
                 catch (Exception ex)
                 {
@@ -291,7 +298,17 @@ namespace SimListView
                 }
             }
         }
-
+        protected virtual void OnItemChanged(ItemData e)
+        {
+            try
+            {
+                ItemChanged?.Invoke(this, e);
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex, "Error invoking Item Changed event.");
+            }
+        }
         #endregion
     }
 }

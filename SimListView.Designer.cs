@@ -26,6 +26,7 @@ namespace SimListView
             builder.AddEventLog(myEventLogSettings);
         });
         private ILogger? logger = null;
+        public EventHandler<ItemData>? ItemChanged;
         /// <summary>  
         /// Clean up any resources being used.  
         /// </summary>  
@@ -140,6 +141,8 @@ namespace SimListView
 
                 listViewItem.Set("Value", "");
                 Items.Add(listViewItem);
+
+                listViewItem.ItemChanged += OnItemChanged;
             }
         }
         #endregion
@@ -157,6 +160,14 @@ namespace SimListView
             }
 
             return list;
+        }
+        private void OnItemChanged(object? sender, ItemData e)
+        {
+            OnListItemChanged(e);
+        }
+        protected virtual void OnListItemChanged(ItemData e)
+        {
+            ItemChanged?.Invoke(this, e);
         }
     }
 }
