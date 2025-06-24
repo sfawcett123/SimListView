@@ -47,9 +47,6 @@ namespace SimListView
         // </summary>
         private void CreateColumns()
         {
-            this.Items.Clear();
-            this.Columns.Clear();
-
             PropertyInfo[] properties = typeof(Yaml.DataDefinition.Details).GetProperties().ToArray();
 
             foreach (var property in properties)
@@ -59,29 +56,44 @@ namespace SimListView
                     PropertyInfo[] p2 = property.PropertyType.GetProperties().ToArray();
                     foreach (var subProperty in p2)
                     {
-                        ColumnHeader item = new ColumnHeader($"{property.Name}.{subProperty.Name}");
-                        item.Text = $"{property.Name}.{subProperty.Name}";
-                        item.Tag = subProperty;
-                        this.Columns.Add(item);
+                        if (!this.Columns.Cast<ColumnHeader>().Any(item => item.Text == $"{property.Name}.{subProperty.Name}"))
+                        {
+                            ColumnHeader item = new ColumnHeader
+                            {
+                                Text = $"{property.Name}.{subProperty.Name}",
+                                Tag = subProperty
+                            };
+                            this.Columns.Add(item);
+                        }
                     }
                 }
                 else
                 {
-                    ColumnHeader item = new ColumnHeader(property.Name);
-                    item.Text = property.Name;
-                    item.Tag = property;
-                    this.Columns.Add(item);
+                    if (!this.Columns.Cast<ColumnHeader>().Any(item => item.Text == property.Name))
+                    {
+                        ColumnHeader item = new ColumnHeader
+                        {
+                            Text = property.Name,
+                            Tag = property
+                        };
+                        this.Columns.Add(item);
+                    }
                 }
             }
-            ColumnHeader vitem = new ColumnHeader("Value");
-            vitem.Text = "Value";
-            vitem.Tag = "Value";
-            this.Columns.Add(vitem);
+
+            if (!this.Columns.Cast<ColumnHeader>().Any(item => item.Text == "Value"))
+            {
+                ColumnHeader vitem = new ColumnHeader
+                {
+                    Text = "Value",
+                    Tag = "Value"
+                };
+                this.Columns.Add(vitem);
+            }
         }
 
         private void CreateRows(Yaml.DataDefinition data)
         {
-            Items.Clear();
             PropertyInfo[] properties = typeof(Yaml.DataDefinition.Details).GetProperties().ToArray();
 
             foreach ( Yaml.DataDefinition.Details measure in data.measures)

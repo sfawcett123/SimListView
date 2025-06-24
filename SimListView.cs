@@ -32,6 +32,12 @@ namespace SimListView
             }
         }
 
+        public void clear()
+        {
+            this.Items.Clear();
+            this.Columns.Clear();
+        }
+
         public void load(string filePath)
         {
            Debug.WriteLine( $"Loading file {filePath}" );
