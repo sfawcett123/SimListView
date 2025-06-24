@@ -31,8 +31,18 @@ namespace SimListView
             get
             {
                 string? valueText = SubItems["variable"]?.Text;
-                string? indexInt = SubItems["index"]?.Text;
-                return $"{valueText}[{indexInt}]" ?? string.Empty; // Return empty string if Key subitem is not found    
+                return valueText ?? string.Empty; // Return empty string if Key subitem is not found    
+            }
+        }
+        public new int Index
+        {
+            get
+            {
+                string? indexStr = SubItems["index"]?.Text;
+                if (string.IsNullOrEmpty(indexStr))
+                    return 0;
+                if( int.TryParse(indexStr, out var index) ) return index;
+                return 0;
             }
         }
         public bool TestMode
@@ -99,7 +109,7 @@ namespace SimListView
             {
                 if (SubItems.ContainsKey("Value") && SubItems["Value"] != null)
                 {
-                    OnItemChanged(new ItemData { key = this.Key , value = value.ToString() });
+                    OnItemChanged(new ItemData { key = this.Key , value = value.ToString() , index = this.Index });
                     SubItems["Value"]!.Text = value.ToString(); // Use null-forgiving operator to suppress CS8602
                 }
                 else
