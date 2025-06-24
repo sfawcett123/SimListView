@@ -1,20 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Extensions.Logging;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace SimListView
 {
     public partial class SimListView : ListView
     {
         private bool _TestMode = false;
-
+        public SimListView() : base()
+        {
+            InitializeComponent();
+            Init();
+        }
+        public SimListView(ILoggerFactory loggerFactory) : base()
+        {
+            this.factory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory), "Logger factory cannot be null.");
+            InitializeComponent();
+            Init();
+        }
         [DefaultValue(false)]
         public bool TestMode
         {
@@ -31,13 +34,11 @@ namespace SimListView
                 }
             }
         }
-
         public void clear()
         {
             this.Items.Clear();
             this.Columns.Clear();
         }
-
         public void load(string filePath)
         {
            Debug.WriteLine( $"Loading file {filePath}" );
@@ -58,5 +59,21 @@ namespace SimListView
             }
 
         }
+        private void Init()
+        {
+            this.logger = factory.CreateLogger("SimView");
+
+            this.Alignment = ListViewAlignment.Default;
+            this.View = View.Details;
+            this.FullRowSelect = true;
+            this.GridLines = true;
+            this.Location = new Point(10, 9);
+            this.Margin = new Padding(3, 2, 3, 2);
+            this.Name = "SimulatorData";
+            this.Size = new Size(500, 400);
+            this.TabIndex = 0;
+            this.UseCompatibleStateImageBehavior = false;
+        }
+
     }
 }

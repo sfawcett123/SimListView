@@ -65,8 +65,6 @@ namespace SimListView
             return deserializer.Deserialize<DataDefinition>(Data.ToString());
         }
     }
-
-    // Fix for CS1106: Move the extension method to a non-generic static class
     internal static class YamlExtensions
     {
         public static string GetPropertyValue(this object setting, string propertyName, string detailsName = "")

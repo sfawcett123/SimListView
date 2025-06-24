@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 using Timer = System.Timers.Timer;
@@ -83,24 +84,30 @@ namespace SimListView
         }
         private int Value
         {
+        
             get
             {
-                try
-                {
-                    if (SubItems.ContainsKey("Value") && SubItems["Value"] != null)
-                    {
-                        return int.Parse(SubItems["Value"]!.Text); // Use null-forgiving operator to suppress CS8602
-                    }
-                    else
-                    {
-                        Debug.WriteLine("SubItem 'Value' is null or does not exist.");
-                        return 0; // Default value if parsing fails
-                    }
-                }
-                catch (FormatException)
+
+                if ( !SubItems.ContainsKey("Value") || SubItems["Value"] == null )
                 {
                     return 0; // Default value if parsing fails
                 }
+
+                string? valueText = SubItems["Value"]?.Text;
+                
+
+                if (string.IsNullOrEmpty(valueText))
+                {
+                    return 0; // Default value if parsing fails
+                }
+                
+                if ( ! int.TryParse( valueText, out int i) ) 
+                {
+                    
+                    return 0; // Default value if parsing fails
+                }
+           
+                return i; 
             }
         }
         private int Max
@@ -147,6 +154,8 @@ namespace SimListView
                 }
             }
         }
+
+        private ILogger? logger = null;
         private Rotation RotationType
         {
             get
@@ -173,14 +182,16 @@ namespace SimListView
 
         #region Constructors
 
-        public SimListViewItem(string text, SimListView container) : base(text)
+        public SimListViewItem(string text, SimListView container , ILogger logger) : base(text)
         {
+            logger = logger ?? throw new ArgumentNullException(nameof(logger), "Logger cannot be null.");
+
             TestMode = false; // Default to not in test mode
             tick.Elapsed += onTimerTick; // Correctly attach the event handler for the Timer's Elapsed event
             for (int i = 1; i < container.Columns.Count; i++)
             {
                 ListViewSubItem subItem = new(this, "");
-                Debug.WriteLine($"Creating SubItem for column {i}: {container.Columns[i].Text}");
+                logger.LogDebug($"Creating SubItem for column {i}: {container.Columns[i].Text}");
                 subItem.Name = container.Columns[i].Text; // Assuming you want to use the column text as the subitem name
                 this.SubItems.Add(subItem);
             }
@@ -196,7 +207,7 @@ namespace SimListView
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
                 ListViewSubItem si = SubItems[key];
-                Debug.WriteLine($"Setting SubItem '{si.Name}' with value '{value}'");
+                logger?.LogDebug($"Setting SubItem '{si.Name}' with value '{value}'");
                 si.Text = value ?? "";
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.  
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
@@ -210,7 +221,7 @@ namespace SimListView
         #endregion 
 
         #region Private Methods
-        private int incrementValue( int value , int min , int max , int increment , Rotation rotation )
+        private int incrementValue( int value , int min , int max , int increment , Rotation rotation = Rotation.RESTART)
         {
             value += Increment;
 
@@ -241,24 +252,42 @@ namespace SimListView
 
         private void onTimerTick(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            if (TestMode)
+            if (!TestMode)
             {
-                if (this.ListView != null && this.ListView.InvokeRequired)
-                {
+                return;
+            }
+
+            if (this.ListView != null && this.ListView.InvokeRequired)
+            {
+                try
+                {   // If InvokeRequired, use Invoke to update the ListView from the UI thread
                     this.ListView.Invoke(new Action(() =>
                     {
                         if (SubItems.ContainsKey("Value") && SubItems["Value"] != null) // Ensure SubItem exists and is not null  
                         {
-                            SubItems["Value"]!.Text = incrementValue(Value, Min, Max, Increment, RotationType).ToString(); // Use null-forgiving operator to suppress CS8602
+                           string s = incrementValue(Value, Min, Max, Increment, RotationType).ToString(); 
+                           SubItems["Value"]!.Text = s ?? "<EMPTY"; // Use null-forgiving operator to suppress CS8602
                         }
                     }));
                 }
-                else
+                catch (Exception ex)
+                {
+                    logger?.LogError($"Error in Invoke  onTimerTick: {ex.Message}");
+                }
+
+            }
+            else
+            {
+                try
                 {
                     if (SubItems.ContainsKey("Value") && SubItems["Value"] != null) // Ensure SubItem exists and is not null  
                     {
                         SubItems["Value"]!.Text = incrementValue(Value, Min, Max, Increment, RotationType).ToString(); // Use null-forgiving operator to suppress CS8602
                     }
+                }
+                catch (Exception ex)
+                {
+                    logger?.LogError($"Error in onTimerTick: {ex.Message}");
                 }
             }
         }

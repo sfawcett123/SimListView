@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.EventLog;
 
 namespace SimListView
 {
@@ -9,7 +11,21 @@ namespace SimListView
         /// <summary>  
         /// Required designer variable.  
         /// </summary>  
+        private const string _sourceName = "Simulator Service";
+        private const string _logName = "Application";
+        private static EventLogSettings myEventLogSettings = new EventLogSettings
+        {
+            SourceName = _sourceName,
+            LogName = _logName
+        };
         private System.ComponentModel.IContainer components = null;
+        private ILoggerFactory factory = LoggerFactory.Create(builder =>
+        {
+            builder.AddConsole();
+            builder.AddDebug();
+            builder.AddEventLog(myEventLogSettings);
+        });
+        private ILogger? logger = null;
         /// <summary>  
         /// Clean up any resources being used.  
         /// </summary>  
@@ -91,14 +107,13 @@ namespace SimListView
                 this.Columns.Add(vitem);
             }
         }
-
         private void CreateRows(Yaml.DataDefinition data)
         {
             PropertyInfo[] properties = typeof(Yaml.DataDefinition.Details).GetProperties().ToArray();
 
             foreach ( Yaml.DataDefinition.Details measure in data.measures)
             {
-               SimListViewItem listViewItem = new SimListViewItem( measure.Id , this);
+               SimListViewItem listViewItem = new SimListViewItem( measure.Id , this , logger);
 
                foreach (var property in properties)
                 {
