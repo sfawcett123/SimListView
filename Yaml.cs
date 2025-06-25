@@ -8,7 +8,7 @@ namespace SimListView
     {
         RESTART,
         RETURN
-        
+
     }
     internal class Yaml
     {
@@ -74,7 +74,7 @@ namespace SimListView
                 throw new NullReferenceException("Setting cannot be null");
             }
 
-            PropertyInfo parent , child;
+            PropertyInfo parent, child;
             var detailsInstance = new Yaml.DataDefinition.Details();
             var settingInstance = new Yaml.DataDefinition.Settings();
 
@@ -100,7 +100,7 @@ namespace SimListView
                 child = settingInstance.GetType().GetProperties().Single(pi => pi.Name == detailsName);
                 var p = parent.GetValue(setting);
                 rval = child.GetValue(p)?.ToString() ?? "";
-               
+
             }
             else
             {

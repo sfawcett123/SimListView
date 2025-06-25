@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.Xml;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 using Timer = System.Timers.Timer;
 
 namespace SimListView
@@ -41,7 +38,7 @@ namespace SimListView
                 string? indexStr = SubItems["index"]?.Text;
                 if (string.IsNullOrEmpty(indexStr))
                     return 0;
-                if( int.TryParse(indexStr, out var index) ) return index;
+                if (int.TryParse(indexStr, out var index)) return index;
                 return 0;
             }
         }
@@ -109,7 +106,7 @@ namespace SimListView
             {
                 if (SubItems.ContainsKey("Value") && SubItems["Value"] != null)
                 {
-                    OnItemChanged(new ItemData { key = this.Key , value = value.ToString() , index = this.Index });
+                    OnItemChanged(new ItemData { key = this.Key, value = value.ToString(), index = this.Index });
                     SubItems["Value"]!.Text = value.ToString(); // Use null-forgiving operator to suppress CS8602
                 }
                 else
@@ -120,26 +117,26 @@ namespace SimListView
             get
             {
 
-                if ( !SubItems.ContainsKey("Value") || SubItems["Value"] == null )
+                if (!SubItems.ContainsKey("Value") || SubItems["Value"] == null)
                 {
                     return 0; // Default value if parsing fails
                 }
 
                 string? valueText = SubItems["Value"]?.Text;
-                
+
 
                 if (string.IsNullOrEmpty(valueText))
                 {
                     return 0; // Default value if parsing fails
                 }
-                
-                if ( ! int.TryParse( valueText, out int i) ) 
+
+                if (!int.TryParse(valueText, out int i))
                 {
-                    
+
                     return 0; // Default value if parsing fails
                 }
-           
-                return i; 
+
+                return i;
             }
         }
         private int Max
@@ -211,7 +208,7 @@ namespace SimListView
         }
         #endregion
         #region Constructors
-        public SimListViewItem(string text, SimListView container , ILogger logger) : base(text)
+        public SimListViewItem(string text, SimListView container, ILogger logger) : base(text)
         {
             logger = logger ?? throw new ArgumentNullException(nameof(logger), "Logger cannot be null.");
 
@@ -245,7 +242,7 @@ namespace SimListView
         }
         #endregion 
         #region Private Methods
-        private int incrementValue( int value , int min , int max , int increment , Rotation rotation = Rotation.RESTART)
+        private int incrementValue(int value, int min, int max, int increment, Rotation rotation = Rotation.RESTART)
         {
             value += Increment;
 
@@ -286,7 +283,7 @@ namespace SimListView
                 {   // If InvokeRequired, use Invoke to update the ListView from the UI thread
                     this.ListView.Invoke(new Action(() =>
                     {
-                           Value = incrementValue(Value, Min, Max, Increment, RotationType); 
+                        Value = incrementValue(Value, Min, Max, Increment, RotationType);
 
                     }));
                 }
