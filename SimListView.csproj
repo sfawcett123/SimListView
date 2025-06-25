@@ -24,11 +24,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\Test\LICENSE.txt">
+    <None Include="LICENSE.txt">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <None Include="..\Test\README.md">
+    <None Include="README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
