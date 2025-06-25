@@ -128,9 +128,8 @@ namespace SimListView
                         PropertyInfo[] p2 = property.PropertyType.GetProperties().ToArray();
                         foreach (var subProperty in p2)
                         {
-                           var s = $"{property.Name}.{subProperty.Name}";
-                            // Get the value of the sub-property
-                            listViewItem.Set(s, YamlExtensions.GetPropertyValue ( measure , property.Name , subProperty.Name ) ); 
+                            string tempString = $"{property.Name}.{subProperty.Name}";
+                            listViewItem.Set(tempString, YamlExtensions.GetPropertyValue( measure , property.Name , subProperty.Name ) ); 
                         }
                     }
                     else
