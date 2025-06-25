@@ -9,7 +9,7 @@
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>assets\airplane.ico</ApplicationIcon>
     <Title>Simulator List View Control</Title>
-    <PackageIcon>assets\airplane.png</PackageIcon>
+    <PackageIcon>airplane.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
@@ -45,6 +45,13 @@
     <Compile Update="SimListView.cs">
       <SubType>Component</SubType>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="assets\airplane.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
