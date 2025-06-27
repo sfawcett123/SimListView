@@ -53,10 +53,10 @@ jobs:
           dotnet-version: '8.0.x'
     
     - name: Restore dependencies 
-      run:  dotnet restore
+      run:  dotnet restore ./SimListView.csproj 
 
     - name: Build
-      run:  dotnet build --configuration Release
+      run:  dotnet build --configuration Release --no-restore ./SimListView.csproj
 
     - name: Get version from tag
       id: get_version
