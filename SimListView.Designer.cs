@@ -25,8 +25,13 @@ namespace SimListView
             builder.AddDebug();
             builder.AddEventLog(myEventLogSettings);
         });
+#nullable enable
         private ILogger? logger = null;
+#nullable disable
+
+# nullable enable
         public EventHandler<ItemData>? ItemChanged;
+#nullable disable
         /// <summary>  
         /// Clean up any resources being used.  
         /// </summary>  
@@ -59,9 +64,9 @@ namespace SimListView
             this.TabIndex = 0;
             this.UseCompatibleStateImageBehavior = false;
         }
-        // <summary>
-        /// Creates columns based on the properties of the specified type.
-        // </summary>
+        // <summary>  
+        /// Creates columns based on the properties of the specified type.  
+        // </summary>  
         private void CreateColumns()
         {
             PropertyInfo[] properties = typeof(Yaml.DataDefinition.Details).GetProperties().ToArray();
@@ -112,11 +117,11 @@ namespace SimListView
         {
             PropertyInfo[] properties = typeof(Yaml.DataDefinition.Details).GetProperties().ToArray();
 
-            foreach ( Yaml.DataDefinition.Details measure in data.measures)
+            foreach (Yaml.DataDefinition.Details measure in data.measures)
             {
-               SimListViewItem listViewItem = new SimListViewItem( measure.Id , this , logger);
+                SimListViewItem listViewItem = new SimListViewItem(measure.Id, this, logger);
 
-               foreach (var property in properties)
+                foreach (var property in properties)
                 {
                     if (property.Name == "Id")
                     {
@@ -129,12 +134,12 @@ namespace SimListView
                         foreach (var subProperty in p2)
                         {
                             string tempString = $"{property.Name}.{subProperty.Name}";
-                            listViewItem.Set(tempString, YamlExtensions.GetPropertyValue( measure , property.Name , subProperty.Name ) ); 
+                            listViewItem.Set(tempString, YamlExtensions.GetPropertyValue(measure, property.Name, subProperty.Name));
                         }
                     }
                     else
                     {
-                        listViewItem.Set( property.Name, YamlExtensions.GetPropertyValue(measure , property.Name));
+                        listViewItem.Set(property.Name, YamlExtensions.GetPropertyValue(measure, property.Name));
                     }
                 }
 
@@ -155,12 +160,14 @@ namespace SimListView
             List<string> list = new List<string>();
             foreach (ListViewItem item in this.Items)
             {
-                list.Add(item.Text);
+                string simVariable = item.SubItems.Cast<ListViewItem.ListViewSubItem>()
+                    .FirstOrDefault(subItem => subItem.Name == "Variable")?.Text ?? string.Empty;
+                list.Add(simVariable);
             }
 
             return list;
         }
-        private void OnItemChanged(object? sender, ItemData e)
+        private void OnItemChanged(object sender, ItemData e)
         {
             OnListItemChanged(e);
         }
