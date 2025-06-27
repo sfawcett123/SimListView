@@ -12,6 +12,13 @@
     <PackageIcon>assets\airplane.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <Authors>Steven Fawcett</Authors>
+    <Company>Fawcett</Company>
+    <Description>Listview for MSFS app</Description>
+    <Copyright>© 2025 Steven Fawcett</Copyright>
+    <PackageProjectUrl>https://sfawcett123.github.io/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sfawcett123/SimListView</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
