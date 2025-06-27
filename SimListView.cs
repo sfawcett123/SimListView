@@ -41,11 +41,11 @@ namespace SimListView
         }
         public void load(string filePath)
         {
-            Debug.WriteLine($"Loading file {filePath}");
+            logger?.LogDebug($"Loading file {filePath}");
             Yaml y = new Yaml(filePath);
             if (y.Data == null)
             {
-                Debug.WriteLine("No _Data found in the YAML file.");
+                logger?.LogError("No _Data found in the YAML file.");
                 return;
             }
             if (y.Data.measures != null)

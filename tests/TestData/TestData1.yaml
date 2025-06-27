@@ -1,0 +1,16 @@
+﻿---
+
+measures:
+   - id: engine_1
+     name: "Engine One"
+     variable: "ENG N1 RPM"
+     index: 1
+     real:
+       min: 0
+       max: 16384
+       rotation: RESTART
+       increment: 1638
+     display:
+       min: 0
+       max: 100
+       unit: "RPM"
