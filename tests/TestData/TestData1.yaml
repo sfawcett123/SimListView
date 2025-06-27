@@ -14,3 +14,16 @@ measures:
        min: 0
        max: 100
        unit: "RPM"
+   - id: engine_2
+     name: "Engine Two"
+     variable: "ENG N1 RPM"
+     index: 2
+     real:
+       min: 0
+       max: 16384
+       rotation: RESTART
+       increment: 1638
+     display:
+       min: 0
+       max: 100
+       unit: "RPM"

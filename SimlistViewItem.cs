@@ -100,7 +100,7 @@ namespace SimListView
                 }
             }
         }
-        private int Value
+        public int Value
         {
             set
             {
@@ -240,6 +240,22 @@ namespace SimListView
                 throw new ArgumentException($"Key '{key}' does not exist in SubItems.", nameof(key));
             }
         }
+
+        public bool Contains( string variable , int index )
+        {
+            if (SubItems["variable"]?.Text != variable )
+            {
+                return false;
+            }
+
+            if (SubItems["index"]?.Text != index.ToString())
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         #endregion 
         #region Private Methods
         private int incrementValue(int value, int min, int max, int increment, Rotation rotation = Rotation.RESTART)
