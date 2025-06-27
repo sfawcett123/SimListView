@@ -68,14 +68,14 @@ jobs:
       shell: bash
       run: |
          VERSION=$(echo "${{ steps.get_version.outputs.version }}")
-         dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} -p PackageVersion=${VERSION}
+         dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} -p PackageVersion=${VERSION} ./SimListView.csproj
 
     - name: Get Version (none release)
       if: github.event_name != 'release'
       shell: bash
       run: |
          VERSION=$(date +%s) # Use current timestamp as version
-         dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} -p PackageVersion=${VERSION}
+         dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} -p PackageVersion=${VERSION} ./SimListView.csproj
 
     # Publish the NuGet package as an artifact, so they can be used in the following jobs
     - name: Upload package
