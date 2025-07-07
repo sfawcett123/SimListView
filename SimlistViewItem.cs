@@ -100,7 +100,7 @@ namespace SimListView
                 }
             }
         }
-        public int Value
+        public string Value
         {
             set
             {
@@ -119,24 +119,12 @@ namespace SimListView
 
                 if (!SubItems.ContainsKey("Value") || SubItems["Value"] == null)
                 {
-                    return 0; // Default value if parsing fails
+                    return ""; // Default value if parsing fails
                 }
 
                 string? valueText = SubItems["Value"]?.Text;
 
-
-                if (string.IsNullOrEmpty(valueText))
-                {
-                    return 0; // Default value if parsing fails
-                }
-
-                if (!int.TryParse(valueText, out int i))
-                {
-
-                    return 0; // Default value if parsing fails
-                }
-
-                return i;
+                return valueText;
             }
         }
         private int Max
@@ -241,14 +229,9 @@ namespace SimListView
             }
         }
 
-        public bool Contains( string variable , int index )
+        public bool Contains( string variable )
         {
             if (SubItems["variable"]?.Text != variable )
-            {
-                return false;
-            }
-
-            if (SubItems["index"]?.Text != index.ToString())
             {
                 return false;
             }
@@ -299,7 +282,8 @@ namespace SimListView
                 {   // If InvokeRequired, use Invoke to update the ListView from the UI thread
                     this.ListView.Invoke(new Action(() =>
                     {
-                        Value = incrementValue(Value, Min, Max, Increment, RotationType);
+                        // TODO: Implement the logic to update the Value property
+                        //  Value = incrementValue(Value, Min, Max, Increment, RotationType);
 
                     }));
                 }
@@ -313,7 +297,8 @@ namespace SimListView
             {
                 try
                 {
-                    Value = incrementValue(Value, Min, Max, Increment, RotationType);
+                    // TODO: Implement the logic to update the Value property
+                    //Value = incrementValue(Value, Min, Max, Increment, RotationType);
                 }
                 catch (Exception ex)
                 {

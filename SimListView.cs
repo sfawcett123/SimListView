@@ -42,35 +42,31 @@ namespace SimListView
             this.Columns.Clear();
         }
 
-        private SimListViewItem? Find(string measure, int index)
+        private SimListViewItem? Find(string measure)
         {
-            if (index < 1)
-            {
-                logger?.LogWarning($"Index {index} is less than 1. Cannot find measure '{measure}'.");
-                return  null;
-            }
+
             foreach (SimListViewItem item in this.Items)
             {
-                if (item.Contains(measure, index))
+                if (item.Contains(measure))
                 {
-                    logger?.LogInformation($"Found Item: {item.Name}, Index: {item.Index}, Text: {item.Value}");
+                    logger?.LogInformation($"Found Item: {item.Name}, Text: {item.Value}");
                     return item;
                 }
             }
-            logger?.LogWarning($"Item with measure '{measure}' and index '{index}' not found.");
+            logger?.LogWarning($"Item with measure '{measure}' not found.");
             return null;
         }
         
-        public int getValue(string measure, int index)
+        public string getValue(string measure)
         {
-            SimListViewItem? item = Find(measure, index);
+            SimListViewItem? item = Find(measure);
             if (item != null)
             {
-                logger?.LogInformation($"Item: {item.Name}, Index: {item.Index}, Text: {item.Value}");
+                logger?.LogInformation($"Item: {item.Name}, Text: {item.Value}");
                 return item.Value;
             }
 
-            return 0;
+            return "";
         }
 
         public void load(string filePath)
@@ -94,41 +90,28 @@ namespace SimListView
 
         }
 
-        public bool setValue(string measure, int index, bool value)
-        {
-            return setValue(measure, index, value.ToString());
-        }
 
         public bool setValue(string measure, bool value)
         {
-            return setValue(measure, 1, value.ToString());
-        }
-
-        public bool setValue(string measure, int index , int value)
-        {
-            return setValue(measure, index, value.ToString());
+            return setValue(measure, value.ToString());
         }
 
         public bool setValue(string measure, int value)
         {
-            return setValue(measure, 1, value.ToString() );
+            return setValue(measure, value.ToString());
         }
 
         public bool setValue(string measure, string value)
         {
-            return setValue(measure, 1, value);
-        }
-        public bool setValue(string measure, int index, string value)
-        {
-            SimListViewItem? item = Find(measure, index);
+            SimListViewItem? item = Find(measure);
             if (item != null)
             {
-                item.Value = int.Parse( value);
-                logger?.LogInformation($"Item: {item.Name}, Index: {item.Index}, Text: {item.Value}");
+                item.Value = value;
+                logger?.LogInformation($"Item: {item.Name}, Text: {item.Value}");
                 return true;
             }
 
-            logger?.LogWarning($"Item with measure '{measure}' and index '{index}' not found.");
+            logger?.LogWarning($"Item with measure '{measure}' not found.");
             return false;
 
         }

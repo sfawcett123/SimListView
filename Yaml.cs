@@ -32,7 +32,6 @@ namespace SimListView
                 public string? Id { get; set; }
                 public string? Name { get; set; }
                 public string? Variable { get; set; }
-                public int? Index { get; set; }
                 public Settings? Real { get; set; }
                 public Settings? Display { get; set; }
             }
