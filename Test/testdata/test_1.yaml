@@ -1,0 +1,25 @@
+﻿---
+
+measures:
+  - name: "Engine One"
+    variable: "GENERAL ENG RPM:1"
+    real:
+       min: 0
+       max: 16384
+       rotation: RESTART
+       increment: 1638
+    display:
+       min: 0
+       max: 100
+       unit: "RPM"
+  - name: "Engine Two"
+    variable: "GENERAL ENG RPM:2"
+    real:
+        min: 0
+        max: 16384
+        rotation: RETURN
+        increment: 100
+    display:
+        min: 0
+        max: 100
+        unit: "RPM"
