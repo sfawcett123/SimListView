@@ -38,10 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="testdata\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="testdata\test_1.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
