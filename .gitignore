@@ -4,3 +4,14 @@
 
 /.vs
 /obj/x64/Release/net8.0-windows7.0
+/Test/SimListView.Test/bin
+/Test/SimListView.Test/obj/Release/net8.0-windows
+/Test/SimListView.Test/obj/x64/Debug/net8.0-windows
+/Test/SimListView.Test/obj/Debug/net8.0-windows/SimListView.Test.sourcelink.json
+/Test/SimListView.Test/obj/Debug/net8.0-windows/SimListView.Test.AssemblyInfoInputs.cache
+/Test/SimListView.Test/obj/Debug/net8.0-windows/SimListView.Test.AssemblyInfo.cs
+/Test/SimListView.Test/obj/Debug/net8.0-windows/SimListView.Test.AssemblyInfo.cs
+/Test/SimListView.Test/obj/Debug/net8.0-windows/SimListView.Test.AssemblyInfoInputs.cache
+/Test/SimListView.Test/obj/Debug/net8.0-windows/SimListView.Test.sourcelink.json
+/Test/bin
+/Test/obj
