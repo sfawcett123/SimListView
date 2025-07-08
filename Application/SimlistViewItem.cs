@@ -124,7 +124,7 @@ namespace SimListView
 
                 string? valueText = SubItems["Value"]?.Text;
 
-                return valueText;
+                return valueText ?? "";
             }
         }
         private int Max
