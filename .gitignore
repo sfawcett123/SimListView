@@ -16,3 +16,6 @@
 /Test/bin
 /Test/obj
 /obj
+/Demo/bin/Debug/net8.0-windows
+/Demo/obj
+/Demo/bin/Release/net8.0-windows

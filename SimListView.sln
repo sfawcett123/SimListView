@@ -7,14 +7,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimListView", "Application\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 	ProjectSection(SolutionItems) = preProject
+		airplane.ico = airplane.ico
+		airplane.png = airplane.png
 		.github\workflows\codeql.yml = .github\workflows\codeql.yml
 		.github\dependabot.yml = .github\dependabot.yml
 		Application\LICENSE.txt = Application\LICENSE.txt
 		.github\workflows\nuget.yml = .github\workflows\nuget.yml
 		Application\README.md = Application\README.md
+		testdata\test_1.yaml = testdata\test_1.yaml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimListView.Test", "Test\SimListView.Test.csproj", "{6D42EA9E-1E32-50C2-4ABA-C1B50F0EFBAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimListView.Demo", "Demo\SimListView.Demo.csproj", "{4B95F185-2D8F-E68D-9A98-822D6FAA790C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +35,10 @@ Global
 		{6D42EA9E-1E32-50C2-4ABA-C1B50F0EFBAE}.Debug|x64.Build.0 = Debug|x64
 		{6D42EA9E-1E32-50C2-4ABA-C1B50F0EFBAE}.Release|x64.ActiveCfg = Release|x64
 		{6D42EA9E-1E32-50C2-4ABA-C1B50F0EFBAE}.Release|x64.Build.0 = Release|x64
+		{4B95F185-2D8F-E68D-9A98-822D6FAA790C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4B95F185-2D8F-E68D-9A98-822D6FAA790C}.Debug|x64.Build.0 = Debug|Any CPU
+		{4B95F185-2D8F-E68D-9A98-822D6FAA790C}.Release|x64.ActiveCfg = Release|Any CPU
+		{4B95F185-2D8F-E68D-9A98-822D6FAA790C}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
