@@ -76,15 +76,24 @@ namespace SimListView
                 if (property.PropertyType.IsClass && !property.PropertyType.FullName.StartsWith("System."))
                 {
                     PropertyInfo[] p2 = property.PropertyType.GetProperties().ToArray();
+
                     foreach (var subProperty in p2)
                     {
                         if (!this.Columns.Cast<ColumnHeader>().Any(item => item.Text == $"{property.Name}.{subProperty.Name}"))
                         {
                             ColumnHeader item = new ColumnHeader
                             {
-                                Text = $"{property.Name}.{subProperty.Name}",
-                                Tag = subProperty
+                                Tag = $"{property.Name}.{subProperty.Name}",
+                                Text = subProperty.Name
                             };
+                            if (property.Name.StartsWith("Real") )
+                            {
+                                item.Width = 0;
+                 
+                            }
+                            else
+                                item.AutoResize( ColumnHeaderAutoResizeStyle.ColumnContent );
+
                             this.Columns.Add(item);
                         }
                     }
@@ -96,8 +105,15 @@ namespace SimListView
                         ColumnHeader item = new ColumnHeader
                         {
                             Text = property.Name,
-                            Tag = property
+                            Tag = property.Name
                         };
+                        if (property.Name.StartsWith("Real"))
+                        {
+                            item.Width = 0;
+                        }
+                        else
+                            item.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+
                         this.Columns.Add(item);
                     }
                 }
@@ -108,8 +124,10 @@ namespace SimListView
                 ColumnHeader vitem = new ColumnHeader
                 {
                     Text = "Value",
-                    Tag = "Value"
+                    Tag = "Value",
                 };
+                         
+                vitem.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent); 
                 this.Columns.Add(vitem);
             }
         }
@@ -119,11 +137,11 @@ namespace SimListView
 
             foreach (Yaml.DataDefinition.Details measure in data.measures)
             {
-                SimListViewItem listViewItem = new SimListViewItem(measure.Id, this, logger);
+                SimListViewItem listViewItem = new SimListViewItem(measure.Name, this, logger);
 
                 foreach (var property in properties)
                 {
-                    if (property.Name == "Id")
+                    if (property.Name == "Name")
                     {
                         listViewItem.Text = (string)YamlExtensions.GetPropertyValue(measure, property.Name);
                         continue;

@@ -84,7 +84,8 @@ namespace SimListView
                 CreateRows(y.Data);
                 foreach (ColumnHeader column in this.Columns)
                 {
-                    AutoResizeColumn(column.Index, ColumnHeaderAutoResizeStyle.ColumnContent);
+                    if( column.Width > 0)  // Only resize columns that are visible
+                        AutoResizeColumn(column.Index, ColumnHeaderAutoResizeStyle.ColumnContent);
                 }
             }
 
@@ -130,7 +131,7 @@ namespace SimListView
             this.Size = new Size(500, 400);
             this.TabIndex = 0;
             this.UseCompatibleStateImageBehavior = false;
+             
         }
-
     }
 }

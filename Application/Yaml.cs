@@ -29,7 +29,6 @@ namespace SimListView
 
             public class Details
             {
-                public string? Id { get; set; }
                 public string? Name { get; set; }
                 public string? Variable { get; set; }
                 public Settings? Real { get; set; }
