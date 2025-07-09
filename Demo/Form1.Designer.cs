@@ -43,9 +43,7 @@
             listView.TabIndex = 0;
             listView.UseCompatibleStateImageBehavior = false;
             listView.View = View.Details;
-
-            string filePath = "testdata/test_1.yaml"; // Adjust the path to your test YAML file
-            listView.load(filePath);
+            listView.ColumnWidthChanging += listView_ColumnWidthChanging;
             // 
             // Form1
             // 
@@ -53,12 +51,25 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(listView);
-            Name = "Demo";
+            Name = "Form1";
             Text = "Demo";
             ResumeLayout(false);
         }
 
+        void listView_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            Console.Write("Column Resizing");
+            e.NewWidth = this.listView.Columns[e.ColumnIndex].Width;
+            e.Cancel = true;
+        }
+
         #endregion
+
+        void loadControlData()
+        {
+            // Load data into the SimListView
+            listView.load("testdata/test_1.yaml");
+        }
 
         private SimListView listView;
     }

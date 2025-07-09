@@ -206,26 +206,18 @@ namespace SimListView
             {
                 ListViewSubItem subItem = new(this, "");
                 logger.LogDebug($"Creating SubItem for column {i}: {container.Columns[i].Text}");
-                subItem.Name = container.Columns[i].Text; // Assuming you want to use the column text as the subitem name
+                subItem.Name = container.Columns[i].Text; // Assuming you want to use the column text as the subitem name 
+                subItem.Tag  = container.Columns[i].Tag; // Copy the tag from the column to the subitem
                 this.SubItems.Add(subItem);
             }
         }
-        #endregion
-        #region Public Methods
         public void Set(string key, string value)
         {
-            if (SubItems.ContainsKey(key)) // Check if the key exists in SubItems
+            ListViewSubItem? item = this.SubItems.Cast<ListViewSubItem>()
+                                                 .FirstOrDefault(subItem => subItem.Tag?.ToString() == key);
+            if (item is not null)
             {
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                ListViewSubItem si = SubItems[key];
-                if (si.Text != value) si.Text = value ?? "";
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.  
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-            }
-            else
-            {
-                throw new ArgumentException($"Key '{key}' does not exist in SubItems.", nameof(key));
+                if (item.Text != value) item.Text = value ?? "";
             }
         }
 

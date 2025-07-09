@@ -5,6 +5,8 @@ namespace SimListView.Demo
         public Form1()
         {
             InitializeComponent();
+
+            loadControlData();
         }
     }
 }
